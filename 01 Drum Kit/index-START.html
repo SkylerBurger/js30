@@ -59,6 +59,37 @@
 
 <script>
 
+  function playSound(e) {
+    // Targeting an audio element on the DOM
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+
+    // Targeting a div on the DOM associated with the keypress
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"`);
+
+    // Returning early if there is no associated audio
+    if(!audio) return;
+
+    // Resetting the track in case it is already playing
+    // Then playing the track
+    audio.currentTime = 0;
+    audio.play()
+
+    // Adding a class to the div to temporarily alter styling
+    key.classList.add('playing')
+  }
+
+  function removeTransition(e) {
+    // Ignore events other than transform
+    if (e.propertyName !== 'transform') return;
+    // Remove the class added during keypress after transform completes
+    this.classList.remove('playing');
+  }
+
+  const keys = document.querySelectorAll('.key');
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition))
+  
+  // Takes in an event type and a callback function which is passed the event (e)
+  window.addEventListener('keydown', playSound)
 </script>
 
 
